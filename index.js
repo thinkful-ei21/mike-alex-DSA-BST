@@ -148,6 +148,7 @@ class BinarySearchTree {
     if (!this.right) {
       return this;
     }
+
     return this.right._findMax();
   }
 
@@ -155,7 +156,7 @@ class BinarySearchTree {
 }
 
 function main() {
-  let bst = new BinarySearchTree()
+  let bst = new BinarySearchTree();
   const arr = [[3,'a'],[1,'b'],[4,'c'],[6,'d'],[9,'e'],[2,'f'],[5,'f'],[7,'g']];
 
   arr.forEach(element => {
@@ -163,20 +164,15 @@ function main() {
   });
 
   // console.log(bst.right._findMin());
-  // console.log(bst.find(9))
+  // console.log(bst.right._findMin());
+  // console.log(bst._findMax());
   // console.log(bst.remove(5));
   // console.log(bst._bstHeight(bst));
   // console.log(bst.right.right.right.left);
 }
-main();
+// main();
 
 
-let bst = new BinarySearchTree();
-const arr = [[3,'a'],[1,'b'],[4,'c'],[6,'d'],[9,'e'],[2,'f'],[5,'f'],[7,'g']];
-
-arr.forEach(element => {
-  bst.insert(element[0], element[1]);
-});
 
 const bstHeight = (bst, level=1)  => {
 
@@ -204,12 +200,71 @@ const bstHeight = (bst, level=1)  => {
 
 };
 
-console.log(bstHeight(bst));
+// console.log(bstHeight(bst));
 
-const thirdLargest = () => {
-// look left and right
+const isBst = bst => {
+  if(bst === null) {
+    return true;
+  } else if (bst.right !== null && bst.right.key < bst.key) {
+    return false;
+  } else if (bst.left !== null && bst.left.key > bst.key) {
+    return false;
+  } else {
+    return isBst(bst.right) && isBst(bst.left);
+  }
+};
 
-// 
+// console.log(isBst(bst));
+
+
+
+let bst = new BinarySearchTree();
+const arr = [[3,'a'],[1,'b'],[4,'c'],[6,'d'],[2,'f'],[9,'r'],[5,'f'],[7,'g']];
+
+arr.forEach(element => {
+  bst.insert(element[0], element[1]);
+});
+
+
+// console.log(bst._findMax());
+
+const thirdLargest = (bst) => {
+  let largest = bst._findMax();
+  let secLargest = largest.parent;
+  if(secLargest.left && secLargest.left.key > secLargest.parent.key) {
+    return secLargest.left.key;
+  } else {
+    return secLargest.key;
+  }
 
 };
 
+console.log(thirdLargest(bst));
+
+
+let balBst = new BinarySearchTree();
+const balArr = [[3,'a'],[2,'b'],[4,'c']];
+
+balArr.forEach(element => {
+  balBst.insert(element[0], element[1]);
+});
+
+const isBalanced = bst => {
+  if(!bst) {
+    return false;
+  }
+  let leftHeight = bstHeight(bst.left);
+  let rightHeight = bstHeight(bst.right);
+
+  // console.log(rightHeight);
+  // console.log(leftHeight);
+
+  if((leftHeight - rightHeight > 1)) {
+    return false;
+  }
+  return true;
+
+};
+
+// console.log(isBalanced(bst));
+// console.log(isBalanced(balBst));
